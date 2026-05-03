@@ -1,0 +1,39 @@
+**/node_modules
+**/.next
+**/.git
+**/.github
+**/.vscode
+**/.idea
+**/.DS_Store
+**/Thumbs.db
+
+# Local dev artifacts
+**/.env
+**/.env.local
+**/.env.*.local
+**/data
+**/*.db
+**/*.db-journal
+
+# Build outputs
+**/out
+**/build
+**/dist
+
+# Tests
+**/*.test.ts
+**/*.test.tsx
+**/coverage
+
+# Docs that don't need to be in the image
+README.md
+CHANGELOG.md
+CONTRIBUTING.md
+SELF_HOSTING.md
+PROMO.md
+docs/
+
+# Misc
+**/*.log
+.nyc_output
+.eslintcache

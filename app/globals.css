@@ -51,3 +51,99 @@ button { font-family: inherit; cursor: pointer; }
 .h1 { font-size: clamp(36px, 5vw, 64px); line-height: 1.05; letter-spacing: -0.03em; font-weight: 800; }
 .h2 { font-size: clamp(24px, 3vw, 36px); line-height: 1.15; letter-spacing: -0.02em; font-weight: 700; }
 .lead { font-size: clamp(16px, 1.4vw, 19px); color: var(--slate-700); line-height: 1.6; }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
+
+/* ─── Meeting room ─────────────────────────────────────────────────────── */
+
+.liqaa-room {
+  min-height: 100vh; min-height: 100dvh;
+  background: #0a0d18; color: #fff;
+  display: flex; flex-direction: column;
+}
+
+.liqaa-room__header {
+  display: grid; grid-template-columns: 1fr auto auto; align-items: center; gap: 16px;
+  padding: 12px 22px; border-bottom: 1px solid #1e293b;
+}
+
+.liqaa-room__live-dot {
+  width: 8px; height: 8px; border-radius: 50%; background: #10b981;
+  animation: liqaa-pulse 2s infinite;
+}
+@keyframes liqaa-pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+
+.liqaa-room__body {
+  flex: 1; display: grid; grid-template-columns: minmax(0, 1fr) 320px; min-height: 0;
+}
+
+@media (max-width: 768px) {
+  .liqaa-room__body { grid-template-columns: 1fr; grid-template-rows: 1fr 240px; }
+}
+
+.liqaa-room__stage {
+  padding: 16px; min-height: 0; display: flex; align-items: stretch; justify-content: stretch;
+}
+
+.liqaa-room__side { border-left: 1px solid #1e293b; display: flex; flex-direction: column; min-height: 0; background: #0d1320; }
+@media (max-width: 768px) { .liqaa-room__side { border-left: 0; border-top: 1px solid #1e293b; } }
+
+.liqaa-room__tabs { display: flex; border-bottom: 1px solid #1e293b; }
+.liqaa-room__panel { flex: 1; min-height: 0; display: flex; flex-direction: column; }
+
+.liqaa-room__footer {
+  padding: 14px 22px; border-top: 1px solid #1e293b;
+  display: flex; justify-content: center; align-items: center; gap: 10px; flex-wrap: wrap;
+}
+
+/* tile grid */
+.liqaa-tiles {
+  flex: 1; min-height: 0; width: 100%;
+  display: grid; gap: 12px;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  align-content: start;
+}
+.liqaa-tiles--n1 { grid-template-columns: minmax(0, 1fr); }
+.liqaa-tiles--n2 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.liqaa-tiles--n3, .liqaa-tiles--n4 { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.liqaa-tiles--n5, .liqaa-tiles--n6 { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+@media (max-width: 600px) {
+  .liqaa-tiles, .liqaa-tiles[class*='liqaa-tiles--'] { grid-template-columns: 1fr !important; }
+}
+.liqaa-tiles__empty { color: #64748b; font-size: 13px; padding: 24px; text-align: center; align-self: center; justify-self: center; }
+
+.liqaa-tile {
+  position: relative; aspect-ratio: 16/9; background: #000;
+  border-radius: 14px; overflow: hidden; min-height: 0;
+  outline: 0 solid transparent; transition: outline 0.18s ease;
+}
+.liqaa-tile[data-speaking="true"] { outline: 3px solid #10b981; }
+.liqaa-tile[data-screen="true"] { background: #111827; }
+
+.liqaa-tile__media { width: 100%; height: 100%; object-fit: cover; }
+.liqaa-tile__media--mirror { transform: scaleX(-1); }
+.liqaa-tile__media--contain { object-fit: contain; background: #000; }
+
+.liqaa-tile__avatar {
+  position: absolute; inset: 0; display: flex; align-items: center; justify-content: center;
+  background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+}
+.liqaa-tile__avatar > span {
+  width: 80px; height: 80px; border-radius: 50%; background: #1d4ed8; color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 28px; font-weight: 800; letter-spacing: -1px;
+}
+
+.liqaa-tile__caption {
+  position: absolute; bottom: 8px; left: 8px; right: 8px;
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 10px; background: rgba(0,0,0,.55); border-radius: 8px;
+  backdrop-filter: blur(4px);
+}
+.liqaa-tile__name { font-size: 12px; font-weight: 600; color: #fff; }
+.liqaa-tile__icons { display: inline-flex; gap: 6px; }
