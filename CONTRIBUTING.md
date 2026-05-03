@@ -42,6 +42,15 @@ npm run dev
 
 The app runs on http://localhost:3000.
 
+### Windows users
+
+`better-sqlite3` is a native module. On Windows you'll need either:
+
+- **Visual Studio Build Tools** (`npm install --global windows-build-tools` → adds Python + VC++ build environment), OR
+- **Docker** (skip the Node setup entirely and run `docker compose up -d` — the image bundles everything).
+
+macOS and Linux have working pre-built binaries out of the box.
+
 ### Useful scripts
 
 ```bash
