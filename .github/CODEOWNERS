@@ -1,0 +1,14 @@
+# CODEOWNERS — required reviewers per path
+# https://docs.github.com/repositories/managing-your-repositorys-settings-and-features/customizing-your-repository/about-code-owners
+
+# Default — anything not otherwise matched
+*                       @hartemyaakoub
+
+# Areas where ecosystem-wide impact warrants extra eyes
+/lib/liqaa.ts           @hartemyaakoub
+/app/api/               @hartemyaakoub
+/.github/               @hartemyaakoub
+/Dockerfile             @hartemyaakoub
+/docker-compose.yml     @hartemyaakoub
+/next.config.mjs        @hartemyaakoub
+/SELF_HOSTING.md        @hartemyaakoub

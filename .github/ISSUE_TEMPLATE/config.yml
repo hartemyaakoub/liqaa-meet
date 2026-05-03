@@ -1,0 +1,22 @@
+blank_issues_enabled: false
+
+contact_links:
+  - name: 🔐 Security vulnerability
+    url: https://github.com/hartemyaakoub/liqaa-meet/security/advisories/new
+    about: Report a security issue privately. Do NOT use the public bug tracker.
+
+  - name: 💬 Question / discussion
+    url: https://github.com/hartemyaakoub/liqaa-meet/discussions
+    about: General questions, "how do I…", design conversations.
+
+  - name: 📜 Substantial feature proposal (RFC)
+    url: https://github.com/hartemyaakoub/liqaa-rfcs
+    about: API changes, breaking changes, new integrations — these go through the RFC process first.
+
+  - name: 🏛️ Architecture context
+    url: https://github.com/hartemyaakoub/liqaa-architecture
+    about: Read the ADRs before proposing major design changes.
+
+  - name: 🤝 Sponsored work / SLA support
+    url: mailto:partners@tkawen.com
+    about: Custom features, paid support, on-prem deployment help.

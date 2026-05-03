@@ -4,33 +4,44 @@ import { useEffect, useRef, useState } from 'react';
 
 type Line = { id: string; text: string; ts: number };
 
+// Minimal Web Speech API surface — not in lib.dom.d.ts.
+type SpeechRecognitionResult = { 0: { transcript: string }; isFinal: boolean };
+type SpeechRecognitionEvent = { results: ArrayLike<SpeechRecognitionResult> };
+type SpeechRecognitionErrorEvent = { error: string };
+type SpeechRecognitionInstance = {
+  continuous: boolean;
+  interimResults: boolean;
+  lang: string;
+  onresult: ((e: SpeechRecognitionEvent) => void) | null;
+  onerror: ((e: SpeechRecognitionErrorEvent) => void) | null;
+  onend: (() => void) | null;
+  start: () => void;
+  stop: () => void;
+};
+type SpeechRecognitionCtor = new () => SpeechRecognitionInstance;
+
 /**
  * In-browser AI captions.
  *
- * The reference (production) backend is whisper.cpp compiled to WebAssembly with WebGPU
- * acceleration when available. The model loads once (39 MB tiny / 142 MB base) and is
- * cached in IndexedDB after first use.
+ * Production target: whisper.cpp compiled to WebAssembly with WebGPU acceleration. The model
+ * loads once (39 MB tiny / 142 MB base) and is cached in IndexedDB. Inference happens in a
+ * Web Worker so the main thread stays responsive.
  *
- * For maintainability we initialise via a Web Worker that owns the model. This keeps the
- * main thread responsive during inference.
- *
- * To wire the production model: drop `whisper.wasm` + `ggml-tiny.bin` into /public, and
- * point WORKER_URL below at a worker that exposes:
- *   postMessage({ kind: 'audio', pcm: Float32Array }) → onmessage { kind: 'caption', text }
- *
- * In dev / when WebGPU is unavailable we fall back to the browser's native
- * SpeechRecognition (Chromium only). Safari/Firefox without WebGPU = captions disabled.
+ * v0.3 ships a Web Speech API fallback (Chromium only). The whisper integration lands in
+ * v0.4 — see https://github.com/hartemyaakoub/liqaa-meet/issues for tracking.
  */
 export function Captions({ onTranscript }: { onTranscript?: (text: string) => void }) {
   const [lines, setLines] = useState<Line[]>([]);
   const [status, setStatus] = useState<'init' | 'ready' | 'unsupported' | 'error'>('init');
   const [error, setError] = useState('');
-  const recRef = useRef<SpeechRecognition | null>(null);
+  const recRef = useRef<SpeechRecognitionInstance | null>(null);
 
   useEffect(() => {
-    const SR: typeof SpeechRecognition | undefined =
-      (window as unknown as { SpeechRecognition?: typeof SpeechRecognition }).SpeechRecognition ||
-      (window as unknown as { webkitSpeechRecognition?: typeof SpeechRecognition }).webkitSpeechRecognition;
+    const w = window as unknown as {
+      SpeechRecognition?: SpeechRecognitionCtor;
+      webkitSpeechRecognition?: SpeechRecognitionCtor;
+    };
+    const SR = w.SpeechRecognition || w.webkitSpeechRecognition;
 
     if (!SR) {
       setStatus('unsupported');
@@ -41,6 +52,7 @@ export function Captions({ onTranscript }: { onTranscript?: (text: string) => vo
     rec.continuous = true;
     rec.interimResults = false;
     rec.lang = navigator.language || 'en-US';
+
     rec.onresult = (ev) => {
       const last = ev.results[ev.results.length - 1];
       const text = last[0].transcript.trim();
@@ -51,10 +63,12 @@ export function Captions({ onTranscript }: { onTranscript?: (text: string) => vo
       });
       onTranscript?.(text);
     };
+
     rec.onerror = (e) => {
       setError(e.error || 'speech_error');
       setStatus('error');
     };
+
     rec.onend = () => {
       try { rec.start(); } catch { /* already started */ }
     };
@@ -88,7 +102,7 @@ export function Captions({ onTranscript }: { onTranscript?: (text: string) => vo
         {lines.length === 0 ? (
           <p style={{ color: '#64748b' }}>
             {status === 'unsupported'
-              ? 'This browser does not support in-browser captions. Try Chromium-based browser, or enable WebGPU.'
+              ? 'This browser does not support in-browser captions. Try a Chromium-based browser, or enable WebGPU.'
               : 'Start speaking — captions appear here.'}
           </p>
         ) : (

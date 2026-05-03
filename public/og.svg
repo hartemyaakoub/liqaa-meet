@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <defs>
+    <linearGradient id="g" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0a0d18"/>
+      <stop offset="1" stop-color="#1e293b"/>
+    </linearGradient>
+    <pattern id="dots" x="0" y="0" width="40" height="40" patternUnits="userSpaceOnUse">
+      <circle cx="2" cy="2" r="1.5" fill="#1e293b"/>
+    </pattern>
+  </defs>
+
+  <rect width="1200" height="630" fill="url(#g)"/>
+  <rect width="1200" height="630" fill="url(#dots)"/>
+
+  <!-- Brand row -->
+  <g transform="translate(80, 80)">
+    <rect width="56" height="56" rx="14" fill="#1d4ed8"/>
+    <text x="28" y="42" text-anchor="middle" font-family="-apple-system, BlinkMacSystemFont, system-ui, sans-serif"
+          font-weight="800" font-size="36" fill="#ffffff" letter-spacing="-2">L</text>
+    <text x="78" y="40" font-family="-apple-system, BlinkMacSystemFont, system-ui, sans-serif"
+          font-weight="800" font-size="28" fill="#ffffff" letter-spacing="-0.5">LIQAA Meet</text>
+    <text x="78" y="64" font-family="ui-monospace, SFMono-Regular, monospace"
+          font-weight="600" font-size="13" fill="#94a3b8" letter-spacing="2">v0.3 · OPEN SOURCE · AGPL-3.0</text>
+  </g>
+
+  <!-- Headline -->
+  <g transform="translate(80, 230)">
+    <text font-family="-apple-system, BlinkMacSystemFont, system-ui, sans-serif"
+          font-weight="800" font-size="78" fill="#ffffff" letter-spacing="-3">
+      <tspan x="0" y="0">Video meetings</tspan>
+      <tspan x="0" y="92">without</tspan>
+      <tspan x="0" y="184" fill="#60a5fa">surveillance.</tspan>
+    </text>
+  </g>
+
+  <!-- Bottom strip -->
+  <g transform="translate(80, 540)">
+    <text font-family="-apple-system, BlinkMacSystemFont, system-ui, sans-serif"
+          font-weight="600" font-size="20" fill="#cbd5e1">
+      Self-host in 60 seconds · AI captions in your browser · 100+ languages
+    </text>
+    <text x="0" y="40" font-family="ui-monospace, SFMono-Regular, monospace"
+          font-weight="700" font-size="16" fill="#10b981" letter-spacing="1">
+      $ docker compose up
+    </text>
+  </g>
+
+  <!-- Right tag -->
+  <g transform="translate(1000, 80)">
+    <rect x="0" y="0" width="120" height="32" rx="16" fill="#1d4ed8"/>
+    <text x="60" y="22" text-anchor="middle"
+          font-family="-apple-system, BlinkMacSystemFont, system-ui, sans-serif"
+          font-weight="800" font-size="13" fill="#ffffff" letter-spacing="1">
+      🇩🇿 ALGERIA
+    </text>
+  </g>
+</svg>

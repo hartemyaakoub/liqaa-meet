@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     url: SITE,
   },
   twitter: { card: 'summary_large_image', creator: '@liqaa_io' },
-  icons: { icon: '/favicon.svg' },
+  // app/icon.tsx + app/opengraph-image.tsx are auto-detected by Next.js
 };
 
 export const viewport: Viewport = {
