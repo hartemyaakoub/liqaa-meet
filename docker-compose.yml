@@ -1,0 +1,42 @@
+name: liqaa-meet
+
+services:
+  app:
+    build: .
+    image: ghcr.io/hartemyaakoub/liqaa-meet:latest
+    restart: unless-stopped
+    environment:
+      MEET_DOMAIN: ${MEET_DOMAIN:-localhost:3000}
+      DATABASE_URL: ${DATABASE_URL:-file:/data/meet.db}
+      LIQAA_API_BASE: ${LIQAA_API_BASE:-https://api.liqaa.io}
+      LIQAA_PK: ${LIQAA_PK}
+      LIQAA_SK: ${LIQAA_SK}
+      LIQAA_WEBHOOK_SECRET: ${LIQAA_WEBHOOK_SECRET}
+      FEATURE_CAPTIONS: ${FEATURE_CAPTIONS:-true}
+      FEATURE_SUMMARY: ${FEATURE_SUMMARY:-true}
+      LLM_PROVIDER: ${LLM_PROVIDER:-ollama}
+      LLM_MODEL: ${LLM_MODEL:-llama3.2:3b}
+      LLM_BASE_URL: ${LLM_BASE_URL:-http://ollama:11434}
+      LLM_API_KEY: ${LLM_API_KEY:-}
+    ports:
+      - "${MEET_PORT:-3000}:3000"
+    volumes:
+      - meet-data:/data
+    depends_on:
+      - ollama
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/healthz"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  ollama:
+    image: ollama/ollama:latest
+    restart: unless-stopped
+    volumes:
+      - ollama-data:/root/.ollama
+    profiles: ["with-llm"]
+
+volumes:
+  meet-data:
+  ollama-data:

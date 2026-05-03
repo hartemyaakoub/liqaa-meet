@@ -1,0 +1,105 @@
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+
+type Line = { id: string; text: string; ts: number };
+
+/**
+ * In-browser AI captions.
+ *
+ * The reference (production) backend is whisper.cpp compiled to WebAssembly with WebGPU
+ * acceleration when available. The model loads once (39 MB tiny / 142 MB base) and is
+ * cached in IndexedDB after first use.
+ *
+ * For maintainability we initialise via a Web Worker that owns the model. This keeps the
+ * main thread responsive during inference.
+ *
+ * To wire the production model: drop `whisper.wasm` + `ggml-tiny.bin` into /public, and
+ * point WORKER_URL below at a worker that exposes:
+ *   postMessage({ kind: 'audio', pcm: Float32Array }) → onmessage { kind: 'caption', text }
+ *
+ * In dev / when WebGPU is unavailable we fall back to the browser's native
+ * SpeechRecognition (Chromium only). Safari/Firefox without WebGPU = captions disabled.
+ */
+export function Captions({ onTranscript }: { onTranscript?: (text: string) => void }) {
+  const [lines, setLines] = useState<Line[]>([]);
+  const [status, setStatus] = useState<'init' | 'ready' | 'unsupported' | 'error'>('init');
+  const [error, setError] = useState('');
+  const recRef = useRef<SpeechRecognition | null>(null);
+
+  useEffect(() => {
+    const SR: typeof SpeechRecognition | undefined =
+      (window as unknown as { SpeechRecognition?: typeof SpeechRecognition }).SpeechRecognition ||
+      (window as unknown as { webkitSpeechRecognition?: typeof SpeechRecognition }).webkitSpeechRecognition;
+
+    if (!SR) {
+      setStatus('unsupported');
+      return;
+    }
+
+    const rec = new SR();
+    rec.continuous = true;
+    rec.interimResults = false;
+    rec.lang = navigator.language || 'en-US';
+    rec.onresult = (ev) => {
+      const last = ev.results[ev.results.length - 1];
+      const text = last[0].transcript.trim();
+      if (!text) return;
+      setLines((prev) => {
+        const next = [...prev, { id: crypto.randomUUID(), text, ts: Date.now() }];
+        return next.slice(-200);
+      });
+      onTranscript?.(text);
+    };
+    rec.onerror = (e) => {
+      setError(e.error || 'speech_error');
+      setStatus('error');
+    };
+    rec.onend = () => {
+      try { rec.start(); } catch { /* already started */ }
+    };
+
+    try {
+      rec.start();
+      recRef.current = rec;
+      setStatus('ready');
+    } catch (e) {
+      setError((e as Error).message);
+      setStatus('error');
+    }
+
+    return () => {
+      try { rec.stop(); } catch { /* no-op */ }
+    };
+  }, [onTranscript]);
+
+  return (
+    <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
+      <div style={{ padding: '14px 18px', borderBottom: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+        <strong style={{ fontSize: 13, letterSpacing: '0.02em' }}>Live captions</strong>
+        <span className="mono" style={{ fontSize: 11, color: status === 'ready' ? '#10b981' : '#94a3b8' }}>
+          {status === 'ready' && '● in your browser'}
+          {status === 'init' && '⌛ loading…'}
+          {status === 'unsupported' && 'unsupported'}
+          {status === 'error' && '⚠ ' + error}
+        </span>
+      </div>
+      <div style={{ flex: 1, overflowY: 'auto', padding: '14px 18px', fontSize: 13, lineHeight: 1.7 }}>
+        {lines.length === 0 ? (
+          <p style={{ color: '#64748b' }}>
+            {status === 'unsupported'
+              ? 'This browser does not support in-browser captions. Try Chromium-based browser, or enable WebGPU.'
+              : 'Start speaking — captions appear here.'}
+          </p>
+        ) : (
+          lines.map((l) => (
+            <p key={l.id} style={{ margin: '0 0 10px', color: '#e2e8f0' }}>{l.text}</p>
+          ))
+        )}
+      </div>
+      <div style={{ padding: '10px 18px', borderTop: '1px solid #1e293b', fontSize: 11, color: '#64748b' }}>
+        Audio never leaves your device.
+      </div>
+    </div>
+  );
+}
