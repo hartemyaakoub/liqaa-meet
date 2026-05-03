@@ -14,6 +14,8 @@ Real-time AI captions in 100+ languages — running entirely in your browser.
 
 </div>
 
+![LIQAA Meet — meeting room mockup with 4 participants, in-browser captions panel, and control bar](./docs/hero.svg)
+
 ---
 
 ## Why LIQAA Meet exists

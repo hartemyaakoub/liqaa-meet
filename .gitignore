@@ -21,3 +21,8 @@ Thumbs.db
 next-env.d.ts
 .tsbuildinfo
 *.tsbuildinfo
+
+# Test artifacts
+playwright-report/
+test-results/
+coverage/
