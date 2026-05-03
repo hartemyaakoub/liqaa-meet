@@ -37,29 +37,31 @@ export default async function OG() {
             L
           </div>
           <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <div style={{ fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em' }}>LIQAA Meet</div>
-            <div style={{ fontSize: 13, color: '#94a3b8', letterSpacing: 2 }}>v0.3 · OPEN SOURCE · AGPL-3.0</div>
+            <div style={{ display: 'flex', fontSize: 28, fontWeight: 800, letterSpacing: '-0.02em' }}>LIQAA Meet</div>
+            <div style={{ display: 'flex', fontSize: 13, color: '#94a3b8', letterSpacing: 2 }}>v0.3 · OPEN SOURCE · AGPL-3.0</div>
           </div>
-          <div style={{ marginLeft: 'auto', padding: '6px 14px', borderRadius: 999, background: '#1d4ed8', fontSize: 13, fontWeight: 800, letterSpacing: 1 }}>
+          <div style={{ display: 'flex', marginLeft: 'auto', padding: '6px 14px', borderRadius: 999, background: '#1d4ed8', fontSize: 13, fontWeight: 800, letterSpacing: 1 }}>
             🇩🇿 ALGERIA
           </div>
         </div>
 
         <div style={{ flex: 1, display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <div style={{ fontSize: 80, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.035em' }}>
-            <div>Video meetings</div>
-            <div>without <span style={{ color: '#60a5fa' }}>surveillance.</span></div>
+          <div style={{ display: 'flex', fontSize: 80, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.035em' }}>
+            Video meetings
           </div>
-          <div style={{ marginTop: 24, fontSize: 22, fontWeight: 600, color: '#cbd5e1' }}>
+          <div style={{ display: 'flex', fontSize: 80, fontWeight: 800, lineHeight: 1.05, letterSpacing: '-0.035em' }}>
+            without&nbsp;<span style={{ color: '#60a5fa' }}>surveillance.</span>
+          </div>
+          <div style={{ display: 'flex', marginTop: 24, fontSize: 22, fontWeight: 600, color: '#cbd5e1' }}>
             Self-host in 60 seconds · AI captions in your browser · 100+ languages
           </div>
         </div>
 
         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-          <div style={{ fontFamily: 'ui-monospace, SFMono-Regular, monospace', fontSize: 18, color: '#10b981', fontWeight: 700, letterSpacing: 1 }}>
+          <div style={{ display: 'flex', fontFamily: 'ui-monospace, SFMono-Regular, monospace', fontSize: 18, color: '#10b981', fontWeight: 700, letterSpacing: 1 }}>
             $ docker compose up
           </div>
-          <div style={{ fontSize: 16, color: '#94a3b8', fontWeight: 600 }}>
+          <div style={{ display: 'flex', fontSize: 16, color: '#94a3b8', fontWeight: 600 }}>
             github.com/hartemyaakoub/liqaa-meet
           </div>
         </div>
