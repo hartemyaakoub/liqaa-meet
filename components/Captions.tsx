@@ -54,12 +54,20 @@ export function Captions({ onTranscript }: { onTranscript?: (text: string) => vo
       onTranscript?.(text);
     };
 
+    // Transient errors that the browser raises on tab-blur, silence, or
+    // restart. Don't escalate them to an error pill — the onend handler
+    // will restart the session silently.
+    const TRANSIENT = new Set(['aborted', 'no-speech', 'audio-capture-restart']);
+
     rec.onerror = (e) => {
-      setError(e.error || 'speech_error');
+      const code = e.error || 'speech_error';
+      if (TRANSIENT.has(code)) return;
+      setError(code);
       setStatus('error');
     };
 
     rec.onend = () => {
+      // If we hit a fatal error, don't restart. Otherwise resume.
       try { rec.start(); } catch { /* already started */ }
     };
 
