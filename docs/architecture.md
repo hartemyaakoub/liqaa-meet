@@ -5,45 +5,45 @@ A short tour for engineers reading this codebase for the first time.
 ## The big picture
 
 ```
-                ┌────────────────────────────────────────────┐
-                │   Browser  (the user's laptop / phone)     │
-                │                                            │
-                │   ┌──────────────────────────────────┐     │
-                │   │  Next.js 16 client               │     │
-                │   │  • landing                       │     │
-                │   │  • /r/[code] room UI             │     │
-                │   │  • Captions component (worker)   │ ──┐ │
-                │   └────────┬─────────────────────────┘   │ │
-                │            │                             │ │
-                │            ▼                             ▼ │
-                │   ┌────────────────────┐  ┌──────────────┐ │
-                │   │ Web Audio API +    │  │ whisper.wasm │ │
-                │   │ getUserMedia       │──│ Web Worker   │ │
-                │   │ (mic, camera)      │  │ (off main)   │ │
-                │   └────────┬───────────┘  └──────────────┘ │
-                │            │                               │
-                │            │ DTLS-SRTP encrypted media     │
-                │            │                               │
-                └────────────┼───────────────────────────────┘
-                             ▼
-                ┌────────────────────────────────────────────┐
-                │   LIQAA Cloud / your self-hosted LIQAA     │
-                │   ────────────────────────────────────     │
-                │   LiveKit SFU mesh (eu-central + dz-algiers)│
-                │   forwards media to other peers            │
-                └────────────────────────────────────────────┘
 
-                ┌────────────────────────────────────────────┐
-                │   Next.js 16 server (this repo)            │
-                │                                            │
-                │   /api/rooms        ── POST /v1/rooms      │
-                │   /api/sdk-token    ── POST /v1/sdk-token  │
-                │   /api/summary      ── POST → LLM provider │
-                │   /api/webhooks/    ── verify HMAC,        │
-                │     liqaa              persist events      │
-                │                                            │
-                │   SQLite (default) / Postgres (production) │
-                └────────────────────────────────────────────┘
+ Browser (the user's laptop / phone)
+
+
+ Next.js 16 client
+ • landing
+ • /r/[code] room UI
+ • Captions component (worker)
+
+
+
+
+ Web Audio API + whisper.wasm
+ getUserMedia Web Worker
+ (mic, camera) (off main)
+
+
+ DTLS-SRTP encrypted media
+
+
+
+
+ LIQAA Cloud / your self-hosted LIQAA
+
+ LiveKit SFU mesh (eu-central + dz-algiers)
+ forwards media to other peers
+
+
+
+ Next.js 16 server (this repo)
+
+ /api/rooms POST /v1/rooms
+ /api/sdk-token POST /v1/sdk-token
+ /api/summary POST → LLM provider
+ /api/webhooks/ verify HMAC,
+ liqaa persist events
+
+ SQLite (default) / Postgres (production)
+
 ```
 
 ## Why each piece is there
@@ -85,57 +85,57 @@ A short tour for engineers reading this codebase for the first time.
 
 ```
 liqaa-meet/
-├── app/
-│   ├── layout.tsx           # OG meta + global font import
-│   ├── page.tsx             # landing
-│   ├── globals.css          # tokens (--brand, --slate-*) + reusable classes
-│   ├── new/page.tsx         # "Start a meeting" form
-│   ├── r/[code]/
-│   │   ├── page.tsx         # SSR — verifies the room exists
-│   │   ├── room.tsx         # client — the actual UI
-│   │   └── recap/page.tsx   # post-call summary (SSR)
-│   └── api/
-│       ├── rooms/           # POST → liqaa.createRoom + db write
-│       ├── sdk-token/       # POST → liqaa.issueToken
-│       ├── summary/         # POST → LLM provider, persists summary
-│       ├── webhooks/liqaa/  # POST ← LIQAA, HMAC verify
-│       └── healthz/         # GET → 200 OK
-├── components/
-│   ├── ComparisonTable.tsx  # the landing-page truth table
-│   └── Captions.tsx         # captions hook (worker-backed)
-├── lib/
-│   ├── liqaa.ts             # the only place we talk to LIQAA HTTP API
-│   ├── db.ts                # better-sqlite3 + schema
-│   └── ids.ts               # room code generator
-├── docs/
-│   └── architecture.md      # this file
-├── docker-compose.yml
-├── Dockerfile               # multi-stage, distroless-ish, ~120 MB final
-├── next.config.mjs          # standalone output + security headers
-├── package.json
-└── tsconfig.json
+ app/
+ layout.tsx # OG meta + global font import
+ page.tsx # landing
+ globals.css # tokens (--brand, --slate-*) + reusable classes
+ new/page.tsx # "Start a meeting" form
+ r/[code]/
+ page.tsx # SSR — verifies the room exists
+ room.tsx # client — the actual UI
+ recap/page.tsx # post-call summary (SSR)
+ api/
+ rooms/ # POST → liqaa.createRoom + db write
+ sdk-token/ # POST → liqaa.issueToken
+ summary/ # POST → LLM provider, persists summary
+ webhooks/liqaa/ # POST ← LIQAA, HMAC verify
+ healthz/ # GET → 200 OK
+ components/
+ ComparisonTable.tsx # the landing-page truth table
+ Captions.tsx # captions hook (worker-backed)
+ lib/
+ liqaa.ts # the only place we talk to LIQAA HTTP API
+ db.ts # better-sqlite3 + schema
+ ids.ts # room code generator
+ docs/
+ architecture.md # this file
+ docker-compose.yml
+ Dockerfile # multi-stage, distroless-ish, ~120 MB final
+ next.config.mjs # standalone output + security headers
+ package.json
+ tsconfig.json
 ```
 
 ## Data model
 
 ```sql
 CREATE TABLE rooms (
-  code         TEXT PRIMARY KEY,         -- xyz1-abc2-def3
-  created_at   INTEGER NOT NULL,
-  created_by   TEXT,                     -- nullable: anon-friendly
-  title        TEXT,
-  ended_at     INTEGER,
-  summary      TEXT,                     -- markdown
-  transcript   TEXT                      -- raw, line-separated
+ code TEXT PRIMARY KEY, -- xyz1-abc2-def3
+ created_at INTEGER NOT NULL,
+ created_by TEXT, -- nullable: anon-friendly
+ title TEXT,
+ ended_at INTEGER,
+ summary TEXT, -- markdown
+ transcript TEXT -- raw, line-separated
 );
 
 CREATE TABLE participants (
-  room_code    TEXT REFERENCES rooms(code),
-  user_id      TEXT NOT NULL,            -- u_xxxxxxxx
-  name         TEXT NOT NULL,
-  joined_at    INTEGER NOT NULL,
-  left_at      INTEGER,
-  PRIMARY KEY (room_code, user_id)
+ room_code TEXT REFERENCES rooms(code),
+ user_id TEXT NOT NULL, -- u_xxxxxxxx
+ name TEXT NOT NULL,
+ joined_at INTEGER NOT NULL,
+ left_at INTEGER,
+ PRIMARY KEY (room_code, user_id)
 );
 ```
 
