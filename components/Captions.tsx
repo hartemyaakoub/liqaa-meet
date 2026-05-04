@@ -1,10 +1,10 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { Loader2, AlertCircle } from 'lucide-react';
 
 type Line = { id: string; text: string; ts: number };
 
-// Minimal Web Speech API surface — not in lib.dom.d.ts.
 type SpeechRecognitionResult = { 0: { transcript: string }; isFinal: boolean };
 type SpeechRecognitionEvent = { results: ArrayLike<SpeechRecognitionResult> };
 type SpeechRecognitionErrorEvent = { error: string };
@@ -20,16 +20,6 @@ type SpeechRecognitionInstance = {
 };
 type SpeechRecognitionCtor = new () => SpeechRecognitionInstance;
 
-/**
- * In-browser AI captions.
- *
- * Production target: whisper.cpp compiled to WebAssembly with WebGPU acceleration. The model
- * loads once (39 MB tiny / 142 MB base) and is cached in IndexedDB. Inference happens in a
- * Web Worker so the main thread stays responsive.
- *
- * v0.3 ships a Web Speech API fallback (Chromium only). The whisper integration lands in
- * v0.4 — see https://github.com/hartemyaakoub/liqaa-meet/issues for tracking.
- */
 export function Captions({ onTranscript }: { onTranscript?: (text: string) => void }) {
   const [lines, setLines] = useState<Line[]>([]);
   const [status, setStatus] = useState<'init' | 'ready' | 'unsupported' | 'error'>('init');
@@ -91,12 +81,7 @@ export function Captions({ onTranscript }: { onTranscript?: (text: string) => vo
     <div style={{ display: 'flex', flexDirection: 'column', height: '100%', overflow: 'hidden' }}>
       <div style={{ padding: '14px 18px', borderBottom: '1px solid #1e293b', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
         <strong style={{ fontSize: 13, letterSpacing: '0.02em' }}>Live captions</strong>
-        <span className="mono" style={{ fontSize: 11, color: status === 'ready' ? '#10b981' : '#94a3b8' }}>
-          {status === 'ready' && '● in your browser'}
-          {status === 'init' && '⌛ loading…'}
-          {status === 'unsupported' && 'unsupported'}
-          {status === 'error' && '⚠ ' + error}
-        </span>
+        <StatusPill status={status} error={error} />
       </div>
       <div style={{ flex: 1, overflowY: 'auto', padding: '14px 18px', fontSize: 13, lineHeight: 1.7 }}>
         {lines.length === 0 ? (
@@ -115,5 +100,33 @@ export function Captions({ onTranscript }: { onTranscript?: (text: string) => vo
         Audio never leaves your device.
       </div>
     </div>
+  );
+}
+
+function StatusPill({ status, error }: { status: 'init' | 'ready' | 'unsupported' | 'error'; error: string }) {
+  if (status === 'ready') {
+    return (
+      <span className="mono" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#10b981' }}>
+        <span style={{ width: 6, height: 6, borderRadius: '50%', background: '#10b981', animation: 'liqaa-pulse 2s infinite' }} aria-hidden="true" />
+        on-device
+      </span>
+    );
+  }
+  if (status === 'init') {
+    return (
+      <span className="mono" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#94a3b8' }}>
+        <Loader2 size={11} strokeWidth={2.6} style={{ animation: 'liqaa-spin 1s linear infinite' }} aria-hidden="true" />
+        loading
+      </span>
+    );
+  }
+  if (status === 'unsupported') {
+    return <span className="mono" style={{ fontSize: 11, color: '#94a3b8' }}>unsupported</span>;
+  }
+  return (
+    <span className="mono" style={{ display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 11, color: '#dc2626' }}>
+      <AlertCircle size={11} strokeWidth={2.6} aria-hidden="true" />
+      {error || 'error'}
+    </span>
   );
 }

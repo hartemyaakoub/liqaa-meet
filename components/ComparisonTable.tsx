@@ -1,3 +1,5 @@
+import { Check, X, Minus } from 'lucide-react';
+
 type Cell = boolean | 'partial' | string;
 
 const ROWS: { feature: string; meet: Cell; zoom: Cell; gmeet: Cell; jitsi: Cell }[] = [
@@ -42,10 +44,29 @@ export function ComparisonTable() {
 }
 
 function render(c: Cell) {
-  if (c === true) return <span style={{ color: 'var(--emerald-500)', fontWeight: 700 }}>✓</span>;
-  if (c === false) return <span style={{ color: 'var(--red-500)' }}>✗</span>;
-  if (c === 'partial') return <span style={{ color: '#f59e0b', fontSize: 12, fontWeight: 600 }}>partial</span>;
-  return <span style={{ fontSize: 13, color: 'var(--slate-700)' }}>{c}</span>;
+  if (c === true) {
+    return (
+      <span aria-label="yes" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, borderRadius: 999, background: 'rgba(16, 185, 129, 0.12)', color: 'var(--emerald-500)' }}>
+        <Check size={14} strokeWidth={3} />
+      </span>
+    );
+  }
+  if (c === false) {
+    return (
+      <span aria-label="no" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center', width: 24, height: 24, borderRadius: 999, background: 'rgba(220, 38, 38, 0.08)', color: 'var(--red-500)' }}>
+        <X size={14} strokeWidth={3} />
+      </span>
+    );
+  }
+  if (c === 'partial') {
+    return (
+      <span aria-label="partial" style={{ display: 'inline-flex', alignItems: 'center', gap: 4, padding: '3px 10px', borderRadius: 999, background: 'rgba(245, 158, 11, 0.12)', color: '#b45309', fontSize: 11, fontWeight: 700 }}>
+        <Minus size={12} strokeWidth={3} />
+        partial
+      </span>
+    );
+  }
+  return <span style={{ fontSize: 13, color: 'var(--slate-700)', fontWeight: 600 }}>{c}</span>;
 }
 
 const th: React.CSSProperties = {

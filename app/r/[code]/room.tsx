@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { ShieldCheck, AlertCircle, PhoneOff } from 'lucide-react';
 import { Captions } from '@/components/Captions';
 import { ParticipantTile, type Participant } from '@/components/ParticipantTile';
 import { ChatPanel, type ChatMessage } from '@/components/ChatPanel';
@@ -146,7 +147,8 @@ export function Room({ code, title, ended, pk, features }: Props) {
         <div className="mono" style={{ fontSize: 12, color: '#94a3b8' }}>
           {tiles.length} participant{tiles.length === 1 ? '' : 's'}
         </div>
-        <button onClick={leave} className="btn-primary" style={{ background: '#dc2626', padding: '8px 16px', fontSize: 13 }}>
+        <button onClick={leave} className="liqaa-leave-btn" aria-label="Leave meeting">
+          <PhoneOff size={14} strokeWidth={2.4} aria-hidden="true" />
           Leave
         </button>
       </header>
@@ -190,8 +192,9 @@ export function Room({ code, title, ended, pk, features }: Props) {
       />
 
       {error && (
-        <div role="alert" style={{ position: 'fixed', bottom: 76, left: '50%', transform: 'translateX(-50%)', padding: '10px 16px', background: '#dc2626', color: '#fff', borderRadius: 10, fontSize: 13, maxWidth: 'min(90vw, 480px)' }}>
-          ⚠ {error}
+        <div role="alert" className="liqaa-toast liqaa-toast--error">
+          <AlertCircle size={14} strokeWidth={2.4} aria-hidden="true" />
+          <span>{error}</span>
         </div>
       )}
     </main>
@@ -259,8 +262,9 @@ function Lobby({
         <button onClick={onJoin} disabled={connecting || !name.trim()} className="btn-primary" style={{ width: '100%' }}>
           {connecting ? 'Connecting…' : 'Join meeting'}
         </button>
-        <p style={{ marginTop: 16, fontSize: 12, color: 'var(--slate-500)', textAlign: 'center' }}>
-          🔒 Captions run in your browser. Audio never leaves the device.
+        <p style={{ marginTop: 16, fontSize: 12, color: 'var(--slate-500)', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', gap: 6, width: '100%' }}>
+          <ShieldCheck size={13} strokeWidth={2.2} style={{ color: 'var(--emerald-500)' }} aria-hidden="true" />
+          Captions run in your browser. Audio never leaves the device.
         </p>
       </div>
     </main>

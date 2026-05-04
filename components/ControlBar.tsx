@@ -1,5 +1,7 @@
 'use client';
 
+import { Mic, MicOff, Video, VideoOff, Monitor, MonitorOff, Sparkles } from 'lucide-react';
+
 export function ControlBar({
   muted, camOff, sharing, captionsAvailable,
   onToggleMute, onToggleCam, onToggleScreen,
@@ -14,38 +16,61 @@ export function ControlBar({
 }) {
   return (
     <footer className="liqaa-room__footer">
-      <ControlBtn active={!muted} onClick={onToggleMute} icon={muted ? '🔇' : '🎤'} label={muted ? 'Unmute' : 'Mute'} />
-      <ControlBtn active={!camOff} onClick={onToggleCam} icon={camOff ? '📷❌' : '📷'} label={camOff ? 'Camera on' : 'Camera off'} />
-      <ControlBtn active={sharing} onClick={onToggleScreen} icon={sharing ? '🖥✓' : '🖥'} label={sharing ? 'Stop share' : 'Share screen'} accent />
-      {captionsAvailable && <span className="mono" style={{ marginLeft: 12, fontSize: 11, color: '#94a3b8' }}>CC privately in your browser</span>}
+      <div className="liqaa-controls">
+        <ControlBtn
+          danger={muted}
+          active={!muted}
+          onClick={onToggleMute}
+          Icon={muted ? MicOff : Mic}
+          label={muted ? 'Unmute' : 'Mute'}
+        />
+        <ControlBtn
+          danger={camOff}
+          active={!camOff}
+          onClick={onToggleCam}
+          Icon={camOff ? VideoOff : Video}
+          label={camOff ? 'Start camera' : 'Stop camera'}
+        />
+        <ControlBtn
+          accent={sharing}
+          active={sharing}
+          onClick={onToggleScreen}
+          Icon={sharing ? MonitorOff : Monitor}
+          label={sharing ? 'Stop sharing' : 'Share screen'}
+        />
+        {captionsAvailable && (
+          <span className="liqaa-controls__hint">
+            <Sparkles size={12} strokeWidth={2.4} aria-hidden="true" />
+            <span>Captions on-device</span>
+          </span>
+        )}
+      </div>
     </footer>
   );
 }
 
 function ControlBtn({
-  active, onClick, icon, label, accent,
+  active, onClick, Icon, label, accent, danger,
 }: {
-  active: boolean; onClick: () => void; icon: string; label: string; accent?: boolean;
+  active: boolean;
+  onClick: () => void;
+  Icon: typeof Mic;
+  label: string;
+  accent?: boolean;
+  danger?: boolean;
 }) {
-  const bg = !active && !accent
-    ? '#dc2626'
-    : active && accent
-    ? '#1d4ed8'
-    : '#1e293b';
+  const variant = danger ? 'danger' : accent ? 'accent' : 'default';
   return (
     <button
       onClick={onClick}
       title={label}
       aria-label={label}
       aria-pressed={active}
-      style={{
-        padding: '11px 18px', borderRadius: 10, border: 0, background: bg, color: '#fff',
-        fontWeight: 600, fontSize: 13, cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: 8,
-        transition: 'background 0.12s',
-      }}
+      className="liqaa-ctrl"
+      data-variant={variant}
     >
-      <span aria-hidden="true">{icon}</span>
-      <span>{label}</span>
+      <Icon size={18} strokeWidth={2.2} aria-hidden="true" />
+      <span className="liqaa-ctrl__label">{label}</span>
     </button>
   );
 }

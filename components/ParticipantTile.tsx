@@ -1,6 +1,7 @@
 'use client';
 
 import { useEffect, useRef } from 'react';
+import { MicOff, MonitorUp } from 'lucide-react';
 
 export type Participant = {
   id: string;
@@ -60,8 +61,16 @@ export function ParticipantTile({ participant, self }: { participant: Participan
           {participant.name}{self ? ' (you)' : ''}
         </span>
         <span className="liqaa-tile__icons">
-          {participant.micMuted && <span title="Muted" aria-label="Muted" style={{ fontSize: 12 }}>🔇</span>}
-          {participant.screenStream && <span title="Sharing screen" aria-label="Sharing screen" style={{ fontSize: 12 }}>🖥</span>}
+          {participant.micMuted && (
+            <span title="Muted" aria-label="Muted" className="liqaa-tile__icon liqaa-tile__icon--danger">
+              <MicOff size={11} strokeWidth={2.6} />
+            </span>
+          )}
+          {participant.screenStream && (
+            <span title="Sharing screen" aria-label="Sharing screen" className="liqaa-tile__icon liqaa-tile__icon--accent">
+              <MonitorUp size={11} strokeWidth={2.6} />
+            </span>
+          )}
         </span>
       </div>
     </div>
