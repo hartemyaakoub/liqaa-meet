@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🎥 LIQAA Meet
+# LIQAA Meet
 
 **The open-source video meeting platform you can self-host in 60 seconds.**
 Real-time AI captions in 100+ languages — running entirely in your browser.
@@ -10,7 +10,7 @@ Real-time AI captions in 100+ languages — running entirely in your browser.
 [![Stars](https://img.shields.io/github/stars/hartemyaakoub/liqaa-meet?style=flat-square&color=eab308)](https://github.com/hartemyaakoub/liqaa-meet/stargazers)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-7c3aed?style=flat-square)](./CONTRIBUTING.md)
 
-[**🌐 Live demo: meet.liqaa.io**](https://meet.liqaa.io) · [**📦 Self-host**](./SELF_HOSTING.md) · [**🐙 Twitter**](https://x.com/liqaa_io)
+[** Live demo: meet.liqaa.io**](https://meet.liqaa.io) · [** Self-host**](./SELF_HOSTING.md) · [** Twitter**](https://x.com/liqaa_io)
 
 </div>
 
@@ -24,12 +24,12 @@ Zoom is bloated. Google Meet locks you into Google. Jitsi is functional but unlo
 
 In 2026, the world's video infrastructure deserves to be:
 
-- 🔓 **Open source** — read every line, fork it, ship your own
-- 🏠 **Self-hostable** — your data, your servers, your rules
-- 🎨 **Beautiful** — Stripe-grade design isn't optional anymore
-- 🤖 **AI-native** — captions, summaries, translation in 100+ languages
-- 🛡 **Privacy-first** — captions run in *your browser*, never sent to a server
-- ⚡ **Fast** — Next.js 16 + LiveKit SFU + WASM = sub-second time-to-video
+- **Open source** — read every line, fork it, ship your own
+- **Self-hostable** — your data, your servers, your rules
+- **Beautiful** — Stripe-grade design isn't optional anymore
+- **AI-native** — captions, summaries, translation in 100+ languages
+- **Privacy-first** — captions run in *your browser*, never sent to a server
+- **Fast** — Next.js 16 + LiveKit SFU + WASM = sub-second time-to-video
 
 That's LIQAA Meet.
 
@@ -37,23 +37,23 @@ That's LIQAA Meet.
 
 ### The basics done right
 
-- ✅ **No-install join** — share a link, click, you're in
-- ✅ **HD video, simulcast** — adapts to bad connections
-- ✅ **Screen share** with audio (Chromium + Edge + Firefox)
-- ✅ **Raise hand**, react with emojis, in-call chat
-- ✅ **Breakout rooms** for up to 50 simultaneous splits
-- ✅ **Cloud or self-host** — same experience, your choice
+- **No-install join** — share a link, click, you're in
+- **HD video, simulcast** — adapts to bad connections
+- **Screen share** with audio (Chromium + Edge + Firefox)
+- **Raise hand**, react with emojis, in-call chat
+- **Breakout rooms** for up to 50 simultaneous splits
+- **Cloud or self-host** — same experience, your choice
 
 ### The killer features
 
 | | LIQAA Meet | Zoom | Google Meet | Jitsi |
 | --- | --- | --- | --- | --- |
-| **In-browser AI captions** (no server) | ✅ Whisper.cpp WASM + WebGPU | ❌ (server-side, paid) | ❌ (server-side) | ❌ |
-| **AI summary** after the call | ✅ local Ollama or any API | ❌ ($14/mo Pro) | ❌ (Workspace add-on) | ❌ |
-| **Self-hostable** | ✅ `docker compose up` | ❌ | ❌ | ✅ (complex) |
-| **End-to-end encrypted by default** | ✅ | ❌ (only paid Pro+) | ⚠️ partial | ⚠️ optional |
-| **Bring your own LLM** | ✅ Ollama, OpenAI, Anthropic, llama.cpp | ❌ | ❌ | ❌ |
-| **Open source** | ✅ AGPL-3.0 | ❌ | ❌ | ✅ Apache-2.0 |
+| **In-browser AI captions** (no server) | Whisper.cpp WASM + WebGPU | (server-side, paid) | (server-side) | |
+| **AI summary** after the call | local Ollama or any API | ($14/mo Pro) | (Workspace add-on) | |
+| **Self-hostable** | `docker compose up` | | | (complex) |
+| **End-to-end encrypted by default** | | (only paid Pro+) | partial | optional |
+| **Bring your own LLM** | Ollama, OpenAI, Anthropic, llama.cpp | | | |
+| **Open source** | AGPL-3.0 | | | Apache-2.0 |
 | **Cost (10 users, 100 hrs/mo)** | **$0 self-hosted** | $150 | $72 | $0 |
 
 ## Quick start
@@ -92,10 +92,10 @@ Embed LIQAA Meet rooms in your own SaaS:
 import { MeetRoom } from '@liqaa/meet';
 
 <MeetRoom
-  roomCode="abc-defg-hij"
-  user={{ name: 'Alice', email: 'alice@example.com' }}
-  features={{ captions: true, summary: true, recording: false }}
-  liqaaEndpoint="https://your-self-hosted-liqaa.com"
+ roomCode="abc-defg-hij"
+ user={{ name: 'Alice', email: 'alice@example.com' }}
+ features={{ captions: true, summary: true, recording: false }}
+ liqaaEndpoint="https://your-self-hosted-liqaa.com"
 />
 ```
 
@@ -105,21 +105,21 @@ Most video platforms send your audio to *their* servers, transcribe it there, se
 
 ```
 Your microphone
-      │
-      ▼
-  Web Audio API → 16 kHz PCM
-      │
-      ▼
-  Web Worker (off main thread)
-      │
-      ▼
-  Whisper.cpp compiled to WebAssembly
-      │
-      ▼
-  WebGPU acceleration (fallback: WASM SIMD)
-      │
-      ▼
-  Captions render locally
+
+
+ Web Audio API → 16 kHz PCM
+
+
+ Web Worker (off main thread)
+
+
+ Whisper.cpp compiled to WebAssembly
+
+
+ WebGPU acceleration (fallback: WASM SIMD)
+
+
+ Captions render locally
 ```
 
 The Whisper model (39 MB for `tiny`, 142 MB for `base`) is cached after first load. Inference: ~200 ms for 1 second of audio on M1 / Ryzen 5 laptops. Your audio never leaves the browser.
@@ -136,37 +136,37 @@ After the call, the captions transcript is sent to your configured LLM:
 
 The summary covers:
 
-- 📋 **Decisions made** — bulleted list
-- ✅ **Action items** — assigned to the person who said them
-- ❓ **Open questions** — flagged for follow-up
-- 📑 **Full transcript** — searchable, editable, exportable as .md / .pdf
+- **Decisions made** — bulleted list
+- **Action items** — assigned to the person who said them
+- **Open questions** — flagged for follow-up
+- **Full transcript** — searchable, editable, exportable as .md / .pdf
 
 ## Architecture
 
 ```
-                  ┌──────────────────────────┐
-                  │   meet.liqaa.io          │
-                  │   (this repo, Next.js)   │
-                  └──────────┬───────────────┘
-                             │
-                             ├──── /api/sdk-token ──────┐
-                             │                           ▼
-                             │                    ┌────────────────┐
-                             │                    │  LIQAA Cloud   │
-                             │                    │  (or self-host)│
-                             │                    └───────┬────────┘
-                             │                            │ JWT
-                             │                            ▼
-                             │                    ┌────────────────┐
-                             │                    │  LiveKit SFU   │
-                             │                    │  (eu-central + │
-                             │                    │   dz-algiers)  │
-                             │                    └────────────────┘
-                             │
-                             ├──── /api/rooms ──────────► SQLite
-                             │                            (via Drizzle)
-                             │
-                             └──── /api/summary ────────► Ollama / OpenAI / Anthropic
+
+ meet.liqaa.io
+ (this repo, Next.js)
+
+
+ /api/sdk-token
+
+
+ LIQAA Cloud
+ (or self-host)
+
+ JWT
+
+
+ LiveKit SFU
+ (eu-central +
+ dz-algiers)
+
+
+ /api/rooms SQLite
+ (via Drizzle)
+
+ /api/summary Ollama / OpenAI / Anthropic
 ```
 
 For the full design, see [`docs/architecture.md`](./docs/architecture.md).
@@ -219,13 +219,13 @@ We welcome PRs. Read [`CONTRIBUTING.md`](./CONTRIBUTING.md) — TL;DR: open an i
 
 ## Star history
 
-If LIQAA Meet helps you, the cheapest way to support us is a ⭐. It actually moves the needle in GitHub trending.
+If LIQAA Meet helps you, the cheapest way to support us is a . It actually moves the needle in GitHub trending.
 
 [![Star History Chart](https://api.star-history.com/svg?repos=hartemyaakoub/liqaa-meet&type=Date)](https://star-history.com/#hartemyaakoub/liqaa-meet&Date)
 
 ## License
 
-[AGPL-3.0](./LICENSE) — © 2026 TKAWEN, Algeria. Built in 🇩🇿 for the world.
+[AGPL-3.0](./LICENSE) — © 2026 TKAWEN, Algeria. Built in for the world.
 
 ---
 
