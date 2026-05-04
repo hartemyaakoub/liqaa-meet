@@ -1,5 +1,13 @@
 import Link from 'next/link';
-import { Sparkles, FileText, Lock, Package, Palette, Globe, Zap, ShieldCheck, Github, ArrowRight } from 'lucide-react';
+import { Sparkles, FileText, Lock, Package, Palette, Globe, Zap, ShieldCheck, ArrowRight } from 'lucide-react';
+
+function GithubIcon({ size = 16 }: { size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="currentColor" aria-hidden="true">
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.3 3.44 9.8 8.21 11.39.6.11.82-.26.82-.58v-2.06c-3.34.73-4.04-1.61-4.04-1.61-.55-1.39-1.34-1.76-1.34-1.76-1.09-.74.08-.73.08-.73 1.21.08 1.84 1.24 1.84 1.24 1.07 1.83 2.81 1.3 3.5.99.11-.78.42-1.3.76-1.6-2.66-.3-5.47-1.33-5.47-5.93 0-1.31.47-2.38 1.24-3.22-.13-.3-.54-1.52.11-3.18 0 0 1.01-.32 3.3 1.23.96-.27 1.98-.4 3-.41 1.02.01 2.04.14 3 .41 2.29-1.55 3.3-1.23 3.3-1.23.65 1.66.24 2.88.12 3.18.77.84 1.23 1.91 1.23 3.22 0 4.61-2.81 5.62-5.49 5.92.43.37.81 1.1.81 2.22v3.29c0 .32.22.69.83.58A12 12 0 0 0 24 12c0-6.63-5.37-12-12-12z" />
+    </svg>
+  );
+}
 import { ComparisonTable } from '@/components/ComparisonTable';
 
 export default function Landing() {
@@ -27,7 +35,7 @@ function Header() {
         </Link>
         <nav style={{ display: 'flex', gap: 22, alignItems: 'center', fontSize: 14, fontWeight: 500, color: 'var(--slate-700)' }}>
           <a href="https://github.com/hartemyaakoub/liqaa-meet" target="_blank" rel="noreferrer" style={{ display: 'inline-flex', alignItems: 'center', gap: 6 }}>
-            <Github size={15} strokeWidth={2.2} aria-hidden="true" />
+            <GithubIcon size={15} />
             GitHub
           </a>
           <a href="https://github.com/hartemyaakoub/liqaa-meet/blob/main/SELF_HOSTING.md" target="_blank" rel="noreferrer">Self-host</a>
@@ -63,7 +71,7 @@ function Hero() {
             <ArrowRight size={16} strokeWidth={2.4} aria-hidden="true" />
           </Link>
           <a href="https://github.com/hartemyaakoub/liqaa-meet" target="_blank" rel="noreferrer" className="btn-ghost btn-ghost--xl">
-            <Github size={16} strokeWidth={2.2} aria-hidden="true" />
+            <GithubIcon size={16} />
             Star on GitHub
           </a>
         </div>
