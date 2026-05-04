@@ -25,11 +25,11 @@ cd liqaa-meet
 cp .env.example .env
 nano .env
 # Set:
-#   MEET_DOMAIN=meet.example.com
-#   LIQAA_PK=pk_live_… (from https://liqaa.io/console)
-#   LIQAA_SK=sk_live_…
-#   LIQAA_WEBHOOK_SECRET=whsec_…
-#   LLM_PROVIDER=ollama  (or openai / anthropic if you prefer cloud)
+# MEET_DOMAIN=meet.example.com
+# LIQAA_PK=pk_live_… (from https://liqaa.io/console)
+# LIQAA_SK=sk_live_…
+# LIQAA_WEBHOOK_SECRET=whsec_…
+# LLM_PROVIDER=ollama (or openai / anthropic if you prefer cloud)
 
 # 3. Bring up the stack
 docker compose --profile with-llm up -d
@@ -46,7 +46,7 @@ Put this in `/etc/caddy/Caddyfile`:
 
 ```caddy
 meet.example.com {
-  reverse_proxy localhost:3000
+ reverse_proxy localhost:3000
 }
 ```
 
@@ -56,23 +56,23 @@ meet.example.com {
 
 ```nginx
 server {
-  listen 443 ssl http2;
-  server_name meet.example.com;
+ listen 443 ssl http2;
+ server_name meet.example.com;
 
-  ssl_certificate     /etc/letsencrypt/live/meet.example.com/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/meet.example.com/privkey.pem;
+ ssl_certificate /etc/letsencrypt/live/meet.example.com/fullchain.pem;
+ ssl_certificate_key /etc/letsencrypt/live/meet.example.com/privkey.pem;
 
-  location / {
-    proxy_pass http://127.0.0.1:3000;
-    proxy_set_header Host $host;
-    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-    proxy_set_header X-Forwarded-Proto $scheme;
+ location / {
+ proxy_pass http://127.0.0.1:3000;
+ proxy_set_header Host $host;
+ proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+ proxy_set_header X-Forwarded-Proto $scheme;
 
-    # WebSocket upgrades for real-time
-    proxy_http_version 1.1;
-    proxy_set_header Upgrade $http_upgrade;
-    proxy_set_header Connection "upgrade";
-  }
+# WebSocket upgrades for real-time
+ proxy_http_version 1.1;
+ proxy_set_header Upgrade $http_upgrade;
+ proxy_set_header Connection "upgrade";
+ }
 }
 ```
 
@@ -91,7 +91,7 @@ docker compose cp app:/data/meet.db ./meet-backup-$(date +%F).db
 
 # Or the whole volume
 docker run --rm -v liqaa-meet_meet-data:/data -v $(pwd):/backup alpine \
-  tar czf /backup/meet-data-$(date +%F).tar.gz -C /data .
+ tar czf /backup/meet-data-$(date +%F).tar.gz -C /data .
 ```
 
 ## 2. Vercel + LIQAA Cloud — zero ops
@@ -102,9 +102,9 @@ Push the repo to Vercel, set the env vars, done. Suitable for any team size — 
 # Fork the repo on GitHub, then:
 vercel --prod
 # Set env vars in Vercel dashboard:
-#   LIQAA_PK, LIQAA_SK, LIQAA_WEBHOOK_SECRET
-#   LLM_PROVIDER=openai (or anthropic) + LLM_API_KEY
-#   DATABASE_URL=postgres://… (Vercel Postgres or Supabase)
+# LIQAA_PK, LIQAA_SK, LIQAA_WEBHOOK_SECRET
+# LLM_PROVIDER=openai (or anthropic) + LLM_API_KEY
+# DATABASE_URL=postgres://… (Vercel Postgres or Supabase)
 ```
 
 You'll need a Postgres-compatible database (Vercel Postgres / Neon / Supabase) since SQLite doesn't work on Vercel's serverless runtime. Drizzle handles both.
@@ -131,12 +131,12 @@ The LIQAA SFU (which actually does the heavy media work) is hosted by LIQAA Clou
 
 ## Hardening
 
-- 🔒 Set `LIQAA_WEBHOOK_SECRET` to a real 32-byte random string (not the placeholder).
-- 🔒 Run behind a reverse proxy with TLS (Caddy / Cloudflare / nginx).
-- 🔒 Restrict the `/api/healthz` endpoint to your monitoring vendor's IP range if exposing publicly.
-- 🔒 If using Postgres, restrict access by VPC / firewall — don't expose the DB port publicly.
-- 🔒 Configure `next.config.mjs` `headers` to match your CSP requirements.
-- 🔒 Enable rate limiting at the proxy layer (Caddy `rate_limit`, nginx `limit_req`).
+- Set `LIQAA_WEBHOOK_SECRET` to a real 32-byte random string (not the placeholder).
+- Run behind a reverse proxy with TLS (Caddy / Cloudflare / nginx).
+- Restrict the `/api/healthz` endpoint to your monitoring vendor's IP range if exposing publicly.
+- If using Postgres, restrict access by VPC / firewall — don't expose the DB port publicly.
+- Configure `next.config.mjs` `headers` to match your CSP requirements.
+- Enable rate limiting at the proxy layer (Caddy `rate_limit`, nginx `limit_req`).
 
 ## Troubleshooting
 
