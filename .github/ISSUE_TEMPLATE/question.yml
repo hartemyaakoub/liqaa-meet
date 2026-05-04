@@ -1,0 +1,25 @@
+name: Question
+description: Ask a question about usage, deployment, or architecture.
+title: "[question] "
+labels: ["question"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before opening a question issue, please check Discussions: https://github.com/hartemyaakoub/liqaa-meet/discussions
+        Many usage questions are already answered there, and Discussions is the better place for open-ended help.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your question
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What have you tried?
+      description: Pasting commands, error messages, and links to docs you have already read helps a lot.
+    validations:
+      required: false
