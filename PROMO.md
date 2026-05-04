@@ -41,7 +41,7 @@ Architecture deep-dive: https://github.com/hartemyaakoub/liqaa-architecture
 
 Honest critique very welcome — especially around the AGPL choice, the LIQAA dependency, and anything I'm missing about real-world meeting UX.
 
-— Yaakoub, building from Algiers 🇩🇿
+— Yaakoub, building from Algiers
 ```
 
 **When to post**: Tuesday or Wednesday, 08:00 UTC. That's 03:00 ET (US tech wakes up to it) and a workday in Europe.
@@ -57,7 +57,7 @@ LIQAA Meet is live. Open-source video meetings, self-host in 60 seconds.
 
 The features Zoom locks behind paid tiers — AI captions, AI summary, E2E encryption — are free and run in your browser.
 
-🇩🇿 → 🌍
+ →
 
 github.com/hartemyaakoub/liqaa-meet
 ```
@@ -77,12 +77,12 @@ Time to build.
 ```
 What's actually in the box (v0.3):
 
-✅ One-click rooms, no login to join
-✅ Video, screen share, chat, raise hand
-✅ Captions in your browser (audio never leaves the device)
-✅ AI summary post-call (Ollama / OpenAI / Anthropic — your choice)
-✅ docker compose up to self-host
-✅ AGPL-3.0
+ One-click rooms, no login to join
+ Video, screen share, chat, raise hand
+ Captions in your browser (audio never leaves the device)
+ AI summary post-call (Ollama / OpenAI / Anthropic — your choice)
+ docker compose up to self-host
+ AGPL-3.0
 ```
 
 **(4/8)**:
@@ -126,7 +126,7 @@ Built in Algeria, for the world. We're hiring.
 
 **(8/8)**:
 ```
-If LIQAA Meet helps you, the cheapest support is a ⭐ on GitHub. Genuinely moves the needle.
+If LIQAA Meet helps you, the cheapest support is a on GitHub. Genuinely moves the needle.
 
 Bug reports, feature requests, RFCs → all welcome.
 
@@ -197,7 +197,7 @@ If you're tired of Zoom: meet.liqaa.io
 If you want to deploy it: github.com/hartemyaakoub/liqaa-meet
 If you want to talk about it: comment below
 
-A ⭐ on the repo is the cheapest way to support this kind of work.
+A on the repo is the cheapest way to support this kind of work.
 ```
 
 **When**: Tuesday 09:00 your timezone.
