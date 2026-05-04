@@ -1,212 +1,212 @@
 openapi: 3.1.0
 info:
-  title: LIQAA Meet HTTP API
-  description: |
-    The HTTP surface exposed by `liqaa-meet` itself. This is *not* the LIQAA video API
-    (that lives at https://liqaa.io/docs); these are the meet-specific endpoints used by
-    the browser app and by webhooks from LIQAA Cloud.
-  version: 0.3.0
-  license:
-    name: AGPL-3.0-or-later
-    url: https://www.gnu.org/licenses/agpl-3.0.txt
-  contact:
-    name: LIQAA Meet maintainers
-    url: https://github.com/hartemyaakoub/liqaa-meet/issues
+ title: LIQAA Meet HTTP API
+ description: |
+ The HTTP surface exposed by `liqaa-meet` itself. This is *not* the LIQAA video API
+ (that lives at https://liqaa.io/docs); these are the meet-specific endpoints used by
+ the browser app and by webhooks from LIQAA Cloud.
+ version: 0.3.0
+ license:
+ name: AGPL-3.0-or-later
+ url: https://www.gnu.org/licenses/agpl-3.0.txt
+ contact:
+ name: LIQAA Meet maintainers
+ url: https://github.com/hartemyaakoub/liqaa-meet/issues
 
 servers:
-  - url: https://meet.liqaa.io
-    description: Hosted instance
-  - url: http://localhost:3000
-    description: Local development
+- url: https://meet.liqaa.io
+ description: Hosted instance
+- url: http://localhost:3000
+ description: Local development
 
 paths:
-  /api/healthz:
-    get:
-      summary: Liveness probe
-      description: Always returns 200 if the process is up. Suitable for k8s liveness checks.
-      operationId: healthz
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [status, service, ts]
-                properties:
-                  status: { type: string, enum: [ok] }
-                  service: { type: string, enum: [liqaa-meet] }
-                  ts: { type: integer, description: Unix epoch milliseconds }
+ /api/healthz:
+ get:
+ summary: Liveness probe
+ description: Always returns 200 if the process is up. Suitable for k8s liveness checks.
+ operationId: healthz
+ responses:
+ '200':
+ description: OK
+ content:
+ application/json:
+ schema:
+ type: object
+ required: [status, service, ts]
+ properties:
+ status: { type: string, enum: [ok] }
+ service: { type: string, enum: [liqaa-meet] }
+ ts: { type: integer, description: Unix epoch milliseconds }
 
-  /api/rooms:
-    post:
-      summary: Create a new meeting room
-      operationId: createRoom
-      requestBody:
-        required: false
-        content:
-          application/json:
-            schema:
-              type: object
-              properties:
-                title:    { type: string, maxLength: 120, nullable: true }
-                createdBy:{ type: string, format: email, nullable: true }
-      responses:
-        '200':
-          description: Room created
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [code]
-                properties:
-                  code:
-                    type: string
-                    pattern: '^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$'
-                    example: abc1-d3f4-h5km
-        '502':
-          $ref: '#/components/responses/UpstreamError'
+ /api/rooms:
+ post:
+ summary: Create a new meeting room
+ operationId: createRoom
+ requestBody:
+ required: false
+ content:
+ application/json:
+ schema:
+ type: object
+ properties:
+ title: { type: string, maxLength: 120, nullable: true }
+ createdBy:{ type: string, format: email, nullable: true }
+ responses:
+ '200':
+ description: Room created
+ content:
+ application/json:
+ schema:
+ type: object
+ required: [code]
+ properties:
+ code:
+ type: string
+ pattern: '^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$'
+ example: abc1-d3f4-h5km
+ '502':
+ $ref: '#/components/responses/UpstreamError'
 
-  /api/sdk-token:
-    post:
-      summary: Issue a per-user, per-room JWT
-      description: |
-        The browser sends `{ code, user, name }`. The server uses its `LIQAA_SK` to call
-        LIQAA's `/v1/sdk-token`, returns the resulting short-lived JWT to the browser.
-        This is the canonical "exchange a public key for a scoped token" flow.
-      operationId: issueSdkToken
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [code, user]
-              properties:
-                code: { type: string, pattern: '^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$' }
-                user: { type: string, minLength: 1, maxLength: 120 }
-                name: { type: string, minLength: 1, maxLength: 120 }
-      responses:
-        '200':
-          description: JWT issued
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [jwt, expiresAt]
-                properties:
-                  jwt:       { type: string, description: HS256 JWT scoped to `code` for `user`. }
-                  expiresAt: { type: integer, description: Unix epoch seconds when the token expires. }
-        '400': { $ref: '#/components/responses/BadInput' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '410': { $ref: '#/components/responses/Gone' }
-        '502': { $ref: '#/components/responses/UpstreamError' }
+ /api/sdk-token:
+ post:
+ summary: Issue a per-user, per-room JWT
+ description: |
+ The browser sends `{ code, user, name }`. The server uses its `LIQAA_SK` to call
+ LIQAA's `/v1/sdk-token`, returns the resulting short-lived JWT to the browser.
+ This is the canonical "exchange a public key for a scoped token" flow.
+ operationId: issueSdkToken
+ requestBody:
+ required: true
+ content:
+ application/json:
+ schema:
+ type: object
+ required: [code, user]
+ properties:
+ code: { type: string, pattern: '^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$' }
+ user: { type: string, minLength: 1, maxLength: 120 }
+ name: { type: string, minLength: 1, maxLength: 120 }
+ responses:
+ '200':
+ description: JWT issued
+ content:
+ application/json:
+ schema:
+ type: object
+ required: [jwt, expiresAt]
+ properties:
+ jwt: { type: string, description: HS256 JWT scoped to `code` for `user`. }
+ expiresAt: { type: integer, description: Unix epoch seconds when the token expires. }
+ '400': { $ref: '#/components/responses/BadInput' }
+ '404': { $ref: '#/components/responses/NotFound' }
+ '410': { $ref: '#/components/responses/Gone' }
+ '502': { $ref: '#/components/responses/UpstreamError' }
 
-  /api/summary:
-    post:
-      summary: Generate post-call summary from a transcript
-      description: |
-        Sends the transcript to the configured LLM provider (Ollama by default, OpenAI /
-        Anthropic via env vars). The summary is persisted on the room and rendered on the
-        recap page.
-      operationId: generateSummary
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [code, transcript]
-              properties:
-                code:       { type: string, pattern: '^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$' }
-                transcript: { type: string, minLength: 50 }
-      responses:
-        '200':
-          description: Summary generated
-          content:
-            application/json:
-              schema:
-                type: object
-                required: [summary]
-                properties:
-                  summary:
-                    type: string
-                    description: Markdown — Decisions / Action items / Open questions sections.
-        '400': { $ref: '#/components/responses/BadInput' }
-        '404': { $ref: '#/components/responses/NotFound' }
-        '502': { $ref: '#/components/responses/UpstreamError' }
+ /api/summary:
+ post:
+ summary: Generate post-call summary from a transcript
+ description: |
+ Sends the transcript to the configured LLM provider (Ollama by default, OpenAI /
+ Anthropic via env vars). The summary is persisted on the room and rendered on the
+ recap page.
+ operationId: generateSummary
+ requestBody:
+ required: true
+ content:
+ application/json:
+ schema:
+ type: object
+ required: [code, transcript]
+ properties:
+ code: { type: string, pattern: '^[a-z0-9]{4}-[a-z0-9]{4}-[a-z0-9]{4}$' }
+ transcript: { type: string, minLength: 50 }
+ responses:
+ '200':
+ description: Summary generated
+ content:
+ application/json:
+ schema:
+ type: object
+ required: [summary]
+ properties:
+ summary:
+ type: string
+ description: Markdown — Decisions / Action items / Open questions sections.
+ '400': { $ref: '#/components/responses/BadInput' }
+ '404': { $ref: '#/components/responses/NotFound' }
+ '502': { $ref: '#/components/responses/UpstreamError' }
 
-  /api/webhooks/liqaa:
-    post:
-      summary: Receive a signed webhook from LIQAA
-      description: |
-        Verifies the `LIQAA-Signature` header (HMAC-SHA256, t=…,v1=…) in constant time.
-        Replay window: 5 minutes. See ADR-004 in `liqaa-architecture` for the full design.
-      operationId: receiveLiqaaWebhook
-      parameters:
-        - in: header
-          name: LIQAA-Signature
-          required: true
-          schema: { type: string }
-          example: t=1714680000,v1=8a4f1e2c…
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [id, type, data]
-              properties:
-                id:   { type: string, example: evt_01HK7N0DEA }
-                type: { type: string, enum: [call.started, call.ended, recording.ready] }
-                data: { type: object, additionalProperties: true }
-      responses:
-        '200':
-          description: Verified and accepted
-          content:
-            application/json:
-              schema: { type: object, properties: { ok: { type: boolean } } }
-        '401':
-          description: Signature invalid or stale (>5 min)
-          content:
-            text/plain:
-              schema: { type: string, example: invalid_signature }
+ /api/webhooks/liqaa:
+ post:
+ summary: Receive a signed webhook from LIQAA
+ description: |
+ Verifies the `LIQAA-Signature` header (HMAC-SHA256, t=…,v1=…) in constant time.
+ Replay window: 5 minutes. See ADR-004 in `liqaa-architecture` for the full design.
+ operationId: receiveLiqaaWebhook
+ parameters:
+- in: header
+ name: LIQAA-Signature
+ required: true
+ schema: { type: string }
+ example: t=1714680000,v1=8a4f1e2c…
+ requestBody:
+ required: true
+ content:
+ application/json:
+ schema:
+ type: object
+ required: [id, type, data]
+ properties:
+ id: { type: string, example: evt_01HK7N0DEA }
+ type: { type: string, enum: [call.started, call.ended, recording.ready] }
+ data: { type: object, additionalProperties: true }
+ responses:
+ '200':
+ description: Verified and accepted
+ content:
+ application/json:
+ schema: { type: object, properties: { ok: { type: boolean } } }
+ '401':
+ description: Signature invalid or stale (>5 min)
+ content:
+ text/plain:
+ schema: { type: string, example: invalid_signature }
 
 components:
-  responses:
-    BadInput:
-      description: Request body failed validation
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [error]
-            properties:
-              error:  { type: string, example: invalid_code }
-              detail: { type: string, nullable: true }
-    NotFound:
-      description: Room not found
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error: { type: string, example: room_not_found }
-    Gone:
-      description: Room has already ended
-      content:
-        application/json:
-          schema:
-            type: object
-            properties:
-              error: { type: string, example: room_ended }
-    UpstreamError:
-      description: A required upstream (LIQAA, the LLM provider) is unreachable
-      content:
-        application/json:
-          schema:
-            type: object
-            required: [error]
-            properties:
-              error:  { type: string, example: liqaa_unreachable }
-              detail: { type: string }
+ responses:
+ BadInput:
+ description: Request body failed validation
+ content:
+ application/json:
+ schema:
+ type: object
+ required: [error]
+ properties:
+ error: { type: string, example: invalid_code }
+ detail: { type: string, nullable: true }
+ NotFound:
+ description: Room not found
+ content:
+ application/json:
+ schema:
+ type: object
+ properties:
+ error: { type: string, example: room_not_found }
+ Gone:
+ description: Room has already ended
+ content:
+ application/json:
+ schema:
+ type: object
+ properties:
+ error: { type: string, example: room_ended }
+ UpstreamError:
+ description: A required upstream (LIQAA, the LLM provider) is unreachable
+ content:
+ application/json:
+ schema:
+ type: object
+ required: [error]
+ properties:
+ error: { type: string, example: liqaa_unreachable }
+ detail: { type: string }
