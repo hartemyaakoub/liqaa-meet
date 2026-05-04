@@ -1,84 +1,84 @@
-name: 🐛 Bug report
-description: Something is broken or behaves wrong.
-title: "bug: "
-labels: [bug, triage]
+name: Bug report
+description: Something is broken or behaves unexpectedly.
+title: "[bug] "
+labels: ["bug"]
 body:
   - type: markdown
     attributes:
       value: |
-        Thanks for taking the time to report a bug. Please fill in everything you can — vague reports take much longer to resolve.
+        Thanks for reporting a bug. Filling this carefully helps us reproduce and fix it fast.
 
-  - type: textarea
-    id: what
+        For security issues, please email security@liqaa.io instead of opening a public issue.
+
+  - type: input
+    id: version
     attributes:
-      label: What happened
-      description: Tell us what you observed. Screenshots and screencasts welcome.
+      label: LIQAA Meet version
+      description: From `package.json` or the live demo footer.
+      placeholder: "v0.4.0"
     validations:
       required: true
 
-  - type: textarea
-    id: expected
+  - type: dropdown
+    id: deployment
     attributes:
-      label: What you expected
-      description: What did you expect to happen instead?
+      label: Deployment
+      description: How are you running LIQAA Meet?
+      options:
+        - Live demo (meet.liqaa.io)
+        - Self-hosted (Docker)
+        - Self-hosted (npm run dev)
+        - Self-hosted (other)
+    validations:
+      required: true
+
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options:
+        - Chrome / Chromium
+        - Edge
+        - Brave
+        - Firefox
+        - Safari
+        - Other (specify in repro steps)
     validations:
       required: true
 
   - type: textarea
     id: repro
     attributes:
-      label: Reproduction
-      description: Step-by-step. If we can't reproduce it, we can't fix it.
+      label: Steps to reproduce
+      description: List the exact steps. Smaller is better.
       placeholder: |
-        1. docker compose up -d
-        2. open http://localhost:3000
-        3. click "New room"
-        4. ...
-    validations:
-      required: true
-
-  - type: input
-    id: version
-    attributes:
-      label: Version
-      description: Output of `git rev-parse HEAD` or the release tag.
-      placeholder: v0.3.0
-    validations:
-      required: true
-
-  - type: dropdown
-    id: deploy
-    attributes:
-      label: Deployment mode
-      options:
-        - Docker Compose (self-hosted)
-        - Vercel + LIQAA Cloud
-        - Local dev (npm run dev)
-        - Other
-    validations:
-      required: true
-
-  - type: input
-    id: browser
-    attributes:
-      label: Browser + OS
-      placeholder: Chrome 130 on macOS 14, Firefox 130 on Ubuntu 22.04, …
+        1. Open meet.liqaa.io
+        2. Click "Start a meeting"
+        3. ...
     validations:
       required: true
 
   - type: textarea
-    id: logs
+    id: expected
     attributes:
-      label: Relevant logs
-      description: Console output, server logs, network errors. Strip secrets.
-      render: shell
+      label: Expected behaviour
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behaviour
+      description: Console errors, screenshots, network tab — paste anything relevant.
+    validations:
+      required: true
 
   - type: checkboxes
-    id: terms
+    id: search
     attributes:
-      label: Confirmations
+      label: Searched first?
       options:
-        - label: I searched existing issues and this is not a duplicate
+        - label: I searched existing issues and discussions
           required: true
-        - label: I am running the latest release
+        - label: I checked the troubleshooting section in SELF_HOSTING.md
           required: false
