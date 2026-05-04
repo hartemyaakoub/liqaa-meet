@@ -30,10 +30,10 @@ What's different:
 
 Architecture: Next.js 16, LiveKit SFU under the hood (via LIQAA), better-sqlite3 for state, optional Postgres. Multi-region edge nodes in Frankfurt + Algiers (we're a small team in Algeria — fewer of these get built where I live, so this is partly the "we exist" project).
 
-What's not done yet (v0.4 roadmap):
-* Whisper.cpp WASM is currently the Web Speech API as a fallback (Chromium only). The model loader lands in v0.4.
-* Recording with auto-uploaded MP4 + transcript.
-* End-to-end encryption opt-in.
+What's shipping in v0.5 (next 4-6 weeks):
+* Whisper.cpp WASM. Today's captions use the Web Speech API as a fallback (Chromium only). v0.5 brings the actual WebGPU-accelerated Whisper model — RFC and acceptance criteria already published.
+* Recording with auto-uploaded MP4 + transcript artifact.
+* End-to-end encryption opt-in (insertable streams).
 
 Live demo: https://meet.liqaa.io
 Code: https://github.com/hartemyaakoub/liqaa-meet
