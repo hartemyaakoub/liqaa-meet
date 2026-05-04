@@ -1,26 +1,26 @@
-name: ✨ Feature request
-description: Suggest a new capability or improvement.
-title: "feat: "
-labels: [enhancement, triage]
+name: Feature request
+description: Suggest a new feature or improvement.
+title: "[feature] "
+labels: ["enhancement"]
 body:
   - type: markdown
     attributes:
       value: |
-        Substantial features go through the [LIQAA RFC process](https://github.com/hartemyaakoub/liqaa-rfcs) before any code lands. For small features and improvements, this template is enough.
+        Thanks for proposing a feature. For substantial changes (new APIs, architectural shifts), please open an RFC instead: https://github.com/hartemyaakoub/liqaa-rfcs
 
   - type: textarea
     id: problem
     attributes:
-      label: What's the problem?
-      description: Describe the pain. "X is hard to do" beats "We should add X".
+      label: What problem does this solve?
+      description: Describe the use case before the solution. Who is affected, how often, how much pain.
     validations:
       required: true
 
   - type: textarea
-    id: solution
+    id: proposal
     attributes:
       label: Proposed solution
-      description: What would the feature look like to a user?
+      description: One concrete approach. We will iterate together.
     validations:
       required: true
 
@@ -28,27 +28,27 @@ body:
     id: alternatives
     attributes:
       label: Alternatives considered
-      description: What else did you think about? Why not those?
+      description: What else did you think about? Why didn't they work?
+    validations:
+      required: false
 
   - type: dropdown
     id: scope
     attributes:
-      label: Is this a substantial change?
-      description: |
-        Substantial = new API endpoint, breaking change, new external integration, or anything that would affect a published roadmap. Substantial features need an RFC.
+      label: Scope
       options:
-        - 'No — small UX tweak / copy / dependency bump'
-        - 'Yes — needs an RFC first'
-        - "Not sure — let's discuss"
+        - Small (one component, no new deps)
+        - Medium (multiple components, possibly new dep)
+        - Large (architectural change — needs RFC)
     validations:
       required: true
 
   - type: checkboxes
-    id: terms
+    id: contribute
     attributes:
-      label: Confirmations
+      label: Are you willing to contribute?
       options:
-        - label: I searched existing issues and this is not a duplicate
-          required: true
-        - label: I'd be willing to contribute the implementation
+        - label: I would like to implement this myself
+          required: false
+        - label: I can help with testing / review
           required: false
