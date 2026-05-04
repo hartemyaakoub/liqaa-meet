@@ -10,11 +10,22 @@ Real-time AI captions in 100+ languages — running entirely in your browser.
 [![Stars](https://img.shields.io/github/stars/hartemyaakoub/liqaa-meet?style=flat-square&color=eab308)](https://github.com/hartemyaakoub/liqaa-meet/stargazers)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-7c3aed?style=flat-square)](./CONTRIBUTING.md)
 
-[** Live demo: meet.liqaa.io**](https://meet.liqaa.io) · [** Self-host**](./SELF_HOSTING.md) · [** Twitter**](https://x.com/liqaa_io)
+[**Live demo: meet.liqaa.io**](https://meet.liqaa.io) · [**Self-host**](./SELF_HOSTING.md) · [**Twitter**](https://x.com/liqaa_io)
 
 </div>
 
 ![LIQAA Meet — meeting room mockup with 4 participants, in-browser captions panel, and control bar](./docs/hero.svg)
+
+---
+
+## Quick start
+
+```bash
+docker compose up -d
+```
+
+Open `http://localhost:3000`. That is it.
+Live demo: [meet.liqaa.io](https://meet.liqaa.io). Full self-hosting guide (TLS, Caddy, nginx, sizing) in [SELF_HOSTING.md](./SELF_HOSTING.md).
 
 ---
 
@@ -234,3 +245,4 @@ If LIQAA Meet helps you, the cheapest way to support us is a . It actually moves
 [Website](https://liqaa.io) · [Docs](https://liqaa.io/docs) · [Architecture](https://github.com/hartemyaakoub/liqaa-architecture) · [Examples](https://github.com/hartemyaakoub/liqaa-examples) · [Status](https://github.com/hartemyaakoub/liqaa-status) · [Hire us](mailto:partners@tkawen.com)
 
 </div>
+
